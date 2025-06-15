@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>64-bit Pink Tulip Garden</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Courier New', monospace;
+            overflow: hidden;
+        }
+
+        .garden-container {
+            position: relative;
+            width: 400px;
+            height: 500px;
+            transform: scale(0);
+            animation: gardenAppear 3s ease-out forwards;
+        }
+
+        .tulip-container {
+            position: absolute;
+            opacity: 0;
+        }
+
+        /* Garden arrangement */
+        .tulip-container.tulip1 {
+            left: 140px;
+            top: 50px;
+            animation: tulipAppear 0.8s ease-out 0.5s forwards;
+        }
+
+        .tulip-container.tulip2 {
+            left: 100px;
+            top: 70px;
+            transform: rotate(-15deg);
+            animation: tulipAppear 0.8s ease-out 0.8s forwards;
+        }
+
+        .tulip-container.tulip3 {
+            left: 180px;
+            top: 60px;
+            transform: rotate(10deg);
+            animation: tulipAppear 0.8s ease-out 1.1s forwards;
+        }
+
+        .tulip-container.tulip4 {
+            left: 60px;
+            top: 90px;
+            transform: rotate(-25deg);
+            animation: tulipAppear 0.8s ease-out 1.4s forwards;
+        }
+
+        .tulip-container.tulip5 {
+            left: 220px;
+            top: 80px;
+            transform: rotate(20deg);
+            animation: tulipAppear 0.8s ease-out 1.7s forwards;
+        }
+
+        .tulip-container.tulip6 {
+            left: 120px;
+            top: 30px;
+            transform: rotate(-8deg);
+            animation: tulipAppear 0.8s ease-out 2.0s forwards;
+        }
+
+        .tulip-container.tulip7 {
+            left: 160px;
+            top: 40px;
+            transform: rotate(5deg);
+            animation: tulipAppear 0.8s ease-out 2.3s forwards;
+        }
+
+        .pixel {
+            width: 8px;
+            height: 8px;
+            position: absolute;
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+        }
+
+        /* Pink tulip variations */
+        .petal-light { background-color: #ff69b4; }
+        .petal-medium { background-color: #ff1493; }
+        .petal-dark { background-color: #dc143c; }
+        .petal-highlight { background-color: #ffb6c1; }
+
+        /* Purple tulip variations */
+        .petal-light-purple { background-color: #da70d6; }
+        .petal-medium-purple { background-color: #ba55d3; }
+        .petal-dark-purple { background-color: #8b008b; }
+        .petal-highlight-purple { background-color: #dda0dd; }
+
+        /* Red tulip variations */
+        .petal-light-red { background-color: #ff6b6b; }
+        .petal-medium-red { background-color: #ff4757; }
+        .petal-dark-red { background-color: #c44569; }
+        .petal-highlight-red { background-color: #ff9ff3; }
+
+        /* Coral tulip variations */
+        .petal-light-coral { background-color: #ff7675; }
+        .petal-medium-coral { background-color: #fd79a8; }
+        .petal-dark-coral { background-color: #e84393; }
+        .petal-highlight-coral { background-color: #fdcb6e; }
+
+        /* Stem and leaves - green shades */
+        .stem { background-color: #228b22; }
+        .stem-dark { background-color: #006400; }
+        .leaf { background-color: #32cd32; }
+        .leaf-dark { background-color: #228b22; }
+
+        /* Grass colors */
+        .grass-light { background-color: #7cb342; }
+        .grass-medium { background-color: #689f38; }
+        .grass-dark { background-color: #558b2f; }
+
+        /* Tulip flower structure */
+        .tulip {
+            position: relative;
+            width: 120px;
+            height: 200px;
+        }
+
+        /* Petal pixels - creating tulip shape */
+        .p1 { top: 20px; left: 48px; }
+        .p2 { top: 20px; left: 56px; }
+        .p3 { top: 20px; left: 64px; }
+        
+        .p4 { top: 28px; left: 40px; }
+        .p5 { top: 28px; left: 48px; }
+        .p6 { top: 28px; left: 56px; }
+        .p7 { top: 28px; left: 64px; }
+        .p8 { top: 28px; left: 72px; }
+        
+        .p9 { top: 36px; left: 32px; }
+        .p10 { top: 36px; left: 40px; }
+        .p11 { top: 36px; left: 48px; }
+        .p12 { top: 36px; left: 56px; }
+        .p13 { top: 36px; left: 64px; }
+        .p14 { top: 36px; left: 72px; }
+        .p15 { top: 36px; left: 80px; }
+        
+        .p16 { top: 44px; left: 32px; }
+        .p17 { top: 44px; left: 40px; }
+        .p18 { top: 44px; left: 48px; }
+        .p19 { top: 44px; left: 56px; }
+        .p20 { top: 44px; left: 64px; }
+        .p21 { top: 44px; left: 72px; }
+        .p22 { top: 44px; left: 80px; }
+        
+        .p23 { top: 52px; left: 40px; }
+        .p24 { top: 52px; left: 48px; }
+        .p25 { top: 52px; left: 56px; }
+        .p26 { top: 52px; left: 64px; }
+        .p27 { top: 52px; left: 72px; }
+        
+        .p28 { top: 60px; left: 48px; }
+        .p29 { top: 60px; left: 56px; }
+        .p30 { top: 60px; left: 64px; }
+
+        /* Stem pixels */
+        .s1 { top: 68px; left: 56px; }
+        .s2 { top: 76px; left: 56px; }
+        .s3 { top: 84px; left: 56px; }
+        .s4 { top: 92px; left: 56px; }
+        .s5 { top: 100px; left: 56px; }
+        .s6 { top: 108px; left: 56px; }
+        .s7 { top: 116px; left: 56px; }
+        .s8 { top: 124px; left: 56px; }
+        .s9 { top: 132px; left: 56px; }
+        .s10 { top: 140px; left: 56px; }
+        .s11 { top: 148px; left: 56px; }
+        .s12 { top: 156px; left: 56px; }
+
+        /* Leaf pixels */
+        .l1 { top: 100px; left: 48px; }
+        .l2 { top: 108px; left: 40px; }
+        .l3 { top: 116px; left: 32px; }
+        .l4 { top: 124px; left: 40px; }
+        .l5 { top: 132px; left: 48px; }
+
+        .l6 { top: 120px; left: 64px; }
+        .l7 { top: 128px; left: 72px; }
+        .l8 { top: 136px; left: 80px; }
+        .l9 { top: 144px; left: 72px; }
+        .l10 { top: 152px; left: 64px; }
+
+        /* Grass structure */
+        .grass-area {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 80px;
+            opacity: 0;
+            animation: grassAppear 1s ease-out 2.8s forwards;
+        }
+
+        /* Grass blade positions */
+        .g1 { top: 60px; left: 8px; }
+        .g2 { top: 56px; left: 16px; }
+        .g3 { top: 64px; left: 24px; }
+        .g4 { top: 52px; left: 32px; }
+        .g5 { top: 60px; left: 40px; }
+        .g6 { top: 56px; left: 48px; }
+        .g7 { top: 64px; left: 56px; }
+        .g8 { top: 58px; left: 64px; }
+        .g9 { top: 62px; left: 72px; }
+        .g10 { top: 54px; left: 80px; }
+        .g11 { top: 60px; left: 88px; }
+        .g12 { top: 56px; left: 96px; }
+        .g13 { top: 64px; left: 104px; }
+        .g14 { top: 52px; left: 112px; }
+        .g15 { top: 58px; left: 120px; }
+        .g16 { top: 62px; left: 128px; }
+        .g17 { top: 56px; left: 136px; }
+        .g18 { top: 60px; left: 144px; }
+        .g19 { top: 54px; left: 152px; }
+        .g20 { top: 64px; left: 160px; }
+        .g21 { top: 58px; left: 168px; }
+        .g22 { top: 62px; left: 176px; }
+        .g23 { top: 56px; left: 184px; }
+        .g24 { top: 60px; left: 192px; }
+        .g25 { top: 54px; left: 200px; }
+        .g26 { top: 64px; left: 208px; }
+        .g27 { top: 58px; left: 216px; }
+        .g28 { top: 62px; left: 224px; }
+        .g29 { top: 56px; left: 232px; }
+        .g30 { top: 60px; left: 240px; }
+        .g31 { top: 54px; left: 248px; }
+        .g32 { top: 64px; left: 256px; }
+        .g33 { top: 58px; left: 264px; }
+        .g34 { top: 62px; left: 272px; }
+        .g35 { top: 56px; left: 280px; }
+        .g36 { top: 60px; left: 288px; }
+        .g37 { top: 54px; left: 296px; }
+        .g38 { top: 64px; left: 304px; }
+        .g39 { top: 58px; left: 312px; }
+        .g40 { top: 62px; left: 320px; }
+        .g41 { top: 56px; left: 328px; }
+        .g42 { top: 60px; left: 336px; }
+        .g43 { top: 54px; left: 344px; }
+        .g44 { top: 64px; left: 352px; }
+        .g45 { top: 58px; left: 360px; }
+        .g46 { top: 62px; left: 368px; }
+        .g47 { top: 56px; left: 376px; }
+        .g48 { top: 60px; left: 384px; }
+        .g49 { top: 54px; left: 392px; }
+
+        /* Second row of grass */
+        .g50 { top: 68px; left: 12px; }
+        .g51 { top: 72px; left: 20px; }
+        .g52 { top: 68px; left: 28px; }
+        .g53 { top: 72px; left: 36px; }
+        .g54 { top: 68px; left: 44px; }
+        .g55 { top: 72px; left: 52px; }
+        .g56 { top: 68px; left: 60px; }
+        .g57 { top: 72px; left: 68px; }
+        .g58 { top: 68px; left: 76px; }
+        .g59 { top: 72px; left: 84px; }
+        .g60 { top: 68px; left: 92px; }
+        .g61 { top: 72px; left: 100px; }
+        .g62 { top: 68px; left: 108px; }
+        .g63 { top: 72px; left: 116px; }
+        .g64 { top: 68px; left: 124px; }
+        .g65 { top: 72px; left: 132px; }
+        .g66 { top: 68px; left: 140px; }
+        .g67 { top: 72px; left: 148px; }
+        .g68 { top: 68px; left: 156px; }
+        .g69 { top: 72px; left: 164px; }
+        .g70 { top: 68px; left: 172px; }
+        .g71 { top: 72px; left: 180px; }
+        .g72 { top: 68px; left: 188px; }
+        .g73 { top: 72px; left: 196px; }
+        .g74 { top: 68px; left: 204px; }
+        .g75 { top: 72px; left: 212px; }
+        .g76 { top: 68px; left: 220px; }
+        .g77 { top: 72px; left: 228px; }
+        .g78 { top: 68px; left: 236px; }
+        .g79 { top: 72px; left: 244px; }
+        .g80 { top: 68px; left: 252px; }
+        .g81 { top: 72px; left: 260px; }
+        .g82 { top: 68px; left: 268px; }
+        .g83 { top: 72px; left: 276px; }
+        .g84 { top: 68px; left: 284px; }
+        .g85 { top: 72px; left: 292px; }
+        .g86 { top: 68px; left: 300px; }
+        .g87 { top: 72px; left: 308px; }
+        .g88 { top: 68px; left: 316px; }
+        .g89 { top: 72px; left: 324px; }
+        .g90 { top: 68px; left: 332px; }
+        .g91 { top: 72px; left: 340px; }
+        .g92 { top: 68px; left: 348px; }
+        .g93 { top: 72px; left: 356px; }
+        .g94 { top: 68px; left: 364px; }
+        .g95 { top: 72px; left: 372px; }
+        .g96 { top: 68px; left: 380px; }
+        .g97 { top: 72px; left: 388px; }
+        .g98 { top: 68px; left: 396px; }
+
+        /* Animations */
+        @keyframes gardenAppear {
+            0% {
+                transform: scale(0) rotate(-180deg);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.1) rotate(-90deg);
+                opacity: 0.8;
+            }
+            100% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
+        }
+
+        @keyframes tulipAppear {
+            0% {
+                opacity: 0;
+                transform: translateY(20px) scale(0.8);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes grassAppear {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pixelGlow {
+            0%, 100% { box-shadow: 0 0 5px rgba(255, 105, 180, 0.5); }
+            50% { box-shadow: 0 0 15px rgba(255, 105, 180, 0.8); }
+        }
+
+        .garden-container:hover .pixel {
+            animation: pixelGlow 1s ease-in-out infinite;
+        }
+
+        /* Scanlines effect for retro feel */
+        .scanlines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(0, 255, 0, 0.03) 2px,
+                rgba(0, 255, 0, 0.03) 4px
+            );
+            pointer-events: none;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <div class="scanlines"></div>
+    
+    <div class="garden-container">
+        <!-- Tulip 1 - Pink (center) -->
+        <div class="tulip-container tulip1">
+            <div class="tulip">
+                <div class="pixel petal-highlight p1"></div>
+                <div class="pixel petal-light p2"></div>
+                <div class="pixel petal-highlight p3"></div>
+                
+                <div class="pixel petal-medium p4"></div>
+                <div class="pixel petal-light p5"></div>
+                <div class="pixel petal-highlight p6"></div>
+                <div class="pixel petal-light p7"></div>
+                <div class="pixel petal-medium p8"></div>
+                
+                <div class="pixel petal-dark p9"></div>
+                <div class="pixel petal-medium p10"></div>
+                <div class="pixel petal-light p11"></div>
+                <div class="pixel petal-highlight p12"></div>
+                <div class="pixel petal-light p13"></div>
+                <div class="pixel petal-medium p14"></div>
+                <div class="pixel petal-dark p15"></div>
+                
+                <div class="pixel petal-dark p16"></div>
+                <div class="pixel petal-medium p17"></div>
+                <div class="pixel petal-light p18"></div>
+                <div class="pixel petal-highlight p19"></div>
+                <div class="pixel petal-light p20"></div>
+                <div class="pixel petal-medium p21"></div>
+                <div class="pixel petal-dark p22"></div>
+                
+                <div class="pixel petal-medium p23"></div>
+                <div class="pixel petal-light p24"></div>
+                <div class="pixel petal-highlight p25"></div>
+                <div class="pixel petal-light p26"></div>
+                <div class="pixel petal-medium p27"></div>
+                
+                <div class="pixel petal-light p28"></div>
+                <div class="pixel petal-medium p29"></div>
+                <div class="pixel petal-light p30"></div>
+                
+                <div class="pixel stem s1"></div>
+                <div class="pixel stem-dark s2"></div>
+                <div class="pixel stem s3"></div>
+                <div class="pixel stem-dark s4"></div>
+                <div class="pixel stem s5"></div>
+                <div class="pixel stem-dark s6"></div>
+                <div class="pixel stem s7"></div>
+                <div class="pixel stem-dark s8"></div>
+                <div class="pixel stem s9"></div>
+                <div class="pixel stem-dark s10"></div>
+                <div class="pixel stem s11"></div>
+                <div class="pixel stem-dark s12"></div>
+                
+                <div class="pixel leaf l1"></div>
+                <div class="pixel leaf-dark l2"></div>
+                <div class="pixel leaf l3"></div>
+                <div class="pixel leaf-dark l4"></div>
+                <div class="pixel leaf l5"></div>
+                
+                <div class="pixel leaf l6"></div>
+                <div class="pixel leaf-dark l7"></div>
+                <div class="pixel leaf l8"></div>
+                <div class="pixel leaf-dark l9"></div>
+                <div class="pixel leaf l10"></div>
+            </div>
+        </div>
+
+        <!-- Tulip 2 - Purple (left) -->
+        <div class="tulip-container tulip2">
+            <div class="tulip">
+                <div class="pixel petal-highlight-purple p1"></div>
+                <div class="pixel petal-light-purple p2"></div>
+                <div class="pixel petal-highlight-purple p3"></div>
+                
+                <div class="pixel petal-medium-purple p4"></div>
+                <div class="pixel petal-light-purple p5"></div>
+                <div class="pixel petal-highlight-purple p6"></div>
+                <div class="pixel petal-light-purple p7"></div>
+                <div class="pixel petal-medium-purple p8"></div>
+                
+                <div class="pixel petal-dark-purple p9"></div>
+                <div class="pixel petal-medium-purple p10"></div>
+                <div class="pixel petal-light-purple p11"></div>
+                <div class="pixel petal-highlight-purple p12"></div>
+                <div class="pixel petal-light-purple p13"></div>
+                <div class="pixel petal-medium-purple p14"></div>
+                <div class="pixel petal-dark-purple p15"></div>
+                
+                <div class="pixel petal-dark-purple p16"></div>
+                <div class="pixel petal-medium-purple p17"></div>
+                <div class="pixel petal-light-purple p18"></div>
+                <div class="pixel petal-highlight-purple p19"></div>
+                <div class="pixel petal-light-purple p20"></div>
+                <div class="pixel petal-medium-purple p21"></div>
+                <div class="pixel petal-dark-purple p22"></div>
+                
+                <div class="pixel petal-medium-purple p23"></div>
+                <div class="pixel petal-light-purple p24"></div>
+                <div class="pixel petal-highlight-purple p25"></div>
+                <div class="pixel petal-light-purple p26"></div>
+                <div class="pixel petal-medium-purple p27"></div>
+                
+                <div class="pixel petal-light-purple p28"></div>
+                <div class="pixel petal-medium-purple p29"></div>
+                <div class="pixel petal-light-purple p30"></div>
+                
+                <div class="pixel stem s1"></div>
+                <div class="pixel stem-dark s2"></div>
+                <div class="pixel stem s3"></div>
+                <div class="pixel stem-dark s4"></div>
+                <div class="pixel stem s5"></div>
+                <div class="pixel stem-dark s6"></div>
+                <div class="pixel stem s7"></div>
+                <div class="pixel stem-dark s8"></div>
+                <div class="pixel stem s9"></div>
+                <div class="pixel stem-dark s10"></div>
+                <div class="pixel stem s11"></div>
+                <div class="pixel stem-dark s12"></div>
+                
+                <div class="pixel leaf l1"></div>
+                <div class="pixel leaf-dark l2"></div>
+                <div class="pixel leaf l3"></div>
+                <div class="pixel leaf-dark l4"></div>
+                <div class="pixel leaf l5"></div>
+                
+                <div class="pixel leaf l6"></div>
+                <div class="pixel leaf-dark l7"></div>
+                <div class="pixel leaf l8"></div>
+                <div class="pixel leaf-dark l9"></div>
+                <div class="pixel leaf l10"></div>
+            </div>
+        </div>
+
+        <!-- Tulip 3 - Red (right) -->
+        <div class="tulip-container tulip3">
+            <div class="tulip">
+                <div class="pixel petal-highlight-red p1"></div>
+                <div class="pixel petal-light-red p2"></div>
+                <div class="pixel petal-highlight-red p3"></div>
+                
+                <div class="pixel petal-medium-red p4"></div>
+                <div class="pixel petal-light-red p5"></div>
+                <div class="pixel petal-highlight-red p6"></div>
+                <div class="pixel petal-light-red p7"></div>
+                <div class="pixel petal-medium-red p8"></div>
+                
+                <div class="pixel petal-dark-red p9"></div>
+                <div class="pixel petal-medium-red p10"></div>
+                <div class="pixel petal-light-red p11"></div>
+                <div class="pixel petal-highlight-red p12"></div>
+                <div class="pixel petal-light-red p13"></div>
+                <div class="pixel petal-medium-red p14"></div>
+                <div class="pixel petal-dark-red p15"></div>
+                
+                <div class="pixel petal-dark-red p16"></div>
+                <div class="pixel petal-medium-red p17"></div>
+                <div class="pixel petal-light-red p18"></div>
+                <div class="pixel petal-highlight-red p19"></div>
+                <div class="pixel petal-light-red p20"></div>
+                <div class="pixel petal-medium-red p21"></div>
+                <div class="pixel petal-dark-red p22"></div>
+                
+                <div class="pixel petal-medium-red p23"></div>
+                <div class="pixel petal-light-red p24"></div>
+                <div class="pixel petal-highlight-red p25"></div>
+                <div class="pixel petal-light-red p26"></div>
+                <div class="pixel petal-medium-red p27"></div>
+                
+                <div class="pixel petal-light-red p28"></div>
+                <div class="pixel petal-medium-red p29"></div>
+                <div class="pixel petal-light-red p30"></div>
+                
+                <div class="pixel stem s1"></div>
+                <div class="pixel stem-dark s2"></div>
+                <div class="pixel stem s3"></div>
+                <div class="pixel stem-dark s4"></div>
+                <div class="pixel stem s5"></div>
+                <div class="pixel stem-dark s6"></div>
+                <div class="pixel stem s7"></div>
+                <div class="pixel stem-dark s8"></div>
+                <div class="pixel stem s9"></div>
+                <div class="pixel stem-dark s10"></div>
+                <div class="pixel stem s11"></div>
+                <div class="pixel stem-dark s12"></div>
+                
+                <div class="pixel leaf l1"></div>
+                <div class="pixel leaf-dark l2"></div>
+                <div class="pixel leaf l3"></div>
+                <div class="pixel leaf-dark l4"></div>
+                <div class="pixel leaf l5"></div>
+                
+                <div class="pixel leaf l6"></div>
+                <div class="pixel leaf-dark l7"></div>
+                <div class="pixel leaf l8"></div>
+                <div class="pixel leaf-dark l9"></div>
+                <div class="pixel leaf l10"></div>
+            </div>
+        </div>
+
+        <!-- Tulip 4 - Coral (far left) -->
+        <div class="tulip-container tulip4">
+            <div class="tulip">
+                <div class="pixel petal-highlight-coral p1"></div>
+                <div class="pixel petal-light-coral p2"></div>
+                <div class="pixel petal-highlight-coral p3"></div>
+                
+                <div class="pixel petal-medium-coral p4"></div>
+                <div class="pixel petal-light-coral p5"></div>
+                <div class="pixel petal-highlight-coral p6"></div>
+                <div class="pixel petal-light-coral p7"></div>
+                <div class="pixel petal-medium-coral p8"></div>
+                
+                <div class="pixel petal-dark-coral p9"></div>
+                <div class="pixel petal-medium-coral p10"></div>
+                <div class="pixel petal-light-coral p11"></div>
+                <div class="pixel petal-highlight-coral p12"></div>
+                <div class="pixel petal-light-coral p13"></div>
+                <div class="pixel petal-medium-coral p14"></div>
+                <div class="pixel petal-dark-coral p15"></div>
+                
+                <div class="pixel petal-dark-coral p16"></div>
+                <div class="pixel petal-medium-coral p17"></div>
+                <div class="pixel petal-light-coral p18"></div>
+                <div class="pixel petal-highlight-coral p19"></div>
+                <div class="pixel petal-light-coral p20"></div>
+                <div class="pixel petal-medium-coral p21"></div>
+                <div class="pixel petal-dark-coral p22"></div>
+                
+                <div class="pixel petal-medium-coral p23"></div>
+                <div class="pixel petal-light-coral p24"></div>
+                <div class="pixel petal-highlight-coral p25"></div>
+                <div class="pixel petal-light-coral p26"></div>
+                <div class="pixel petal-medium-coral p27"></div>
+                
+                <div class="pixel petal-light-coral p28"></div>
+                <div class="pixel petal-medium-coral p29"></div>
+                <div class="pixel petal-light-coral p30"></div>
+                
+                <div class="pixel stem s1"></div>
+                <div class="pixel stem-dark s2"></div>
+                <div class="pixel stem s3"></div>
+                <div class="pixel stem-dark s4"></div>
+                <div class="pixel stem s5"></div>
+                <div class="pixel stem-dark s6"></div>
+                <div class="pixel stem s7"></div>
+                <div class="pixel stem-dark s8"></div>
+                <div class="pixel stem s9"></div>
+                <div class="pixel stem-dark s10"></div>
+                <div class="pixel stem s11"></div>
+                <div class="pixel stem-dark s12"></div>
+                
+                <div class="pixel leaf l1"></div>
+                <div class="pixel leaf-dark l2"></div>
+                <div class="pixel leaf l3"></div>
+                <div class="pixel leaf-dark l4"></div>
+                <div class="pixel leaf l5"></div>
+                
+                <div class="pixel leaf l6"></div>
+                <div class="pixel leaf-dark l7"></div>
+                <div class="pixel leaf l8"></div>
+                <div class="pixel leaf-dark l9"></div>
+                <div class="pixel leaf l10"></div>
+            </div>
+        </div>
+
+        <!-- Tulip 5 - Pink (far right) -->
+        <div class="tulip-container tulip5">
+            <div class="tulip">
+                <div class="pixel petal-highlight p1"></div>
+                <div class="pixel petal-light p2"></div>
+                <div class="pixel petal-highlight p3"></div>
+                
+                <div class="pixel petal-medium p4"></div>
+                <div class="pixel petal-light p5"></div>
+                <div class="pixel petal-highlight p6"></div>
+                <div class="pixel petal-light p7"></div>
+                <div class="pixel petal-medium p8"></div>
+                
+                <div class="pixel petal-dark p9"></div>
+                <div class="pixel petal-medium p10"></div>
+                <div class="pixel petal-light p11"></div>
+                <div class="pixel petal-highlight p12"></div>
+                <div class="pixel petal-light p13"></div>
+                <div class="pixel petal-medium p14"></div>
+                <div class="pixel petal-dark p15"></div>
+                
+                <div class="pixel petal-dark p16"></div>
+                <div class="pixel petal-medium p17"></div>
+                <div class="pixel petal-light p18"></div>
+                <div class="pixel petal-highlight p19"></div>
+                <div class="pixel petal-light p20"></div>
+                <div class="pixel petal-medium p21"></div>
+                <div class="pixel petal-dark p22"></div>
+                
+                <div class="pixel petal-medium p23"></div>
+                <div class="pixel petal-light p24"></div>
+                <div class="pixel petal-highlight p25"></div>
+                <div class="pixel petal-light p26"></div>
+                <div class="pixel petal-medium p27"></div>
+                
+                <div class="pixel petal-light p28"></div>
+                <div class="pixel petal-medium p29"></div>
+                <div class="pixel petal-light p30"></div>
+                
+                <div class="pixel stem s1"></div>
+                <div class="pixel stem-dark s2"></div>
+                <div class="pixel stem s3"></div>
+                <div class="pixel stem-dark s4"></div>
+                <div class="pixel stem s5"></div>
+                <div class="pixel stem-dark s6"></div>
+                <div class="pixel stem s7"></div>
+                <div class="pixel stem-dark s8"></div>
+                <div class="pixel stem s9"></div>
+                <div class="pixel stem-dark s10"></div>
+                <div class="pixel stem s11"></div>
+                <div class="pixel stem-dark s12"></div>
+                
+                <div class="pixel leaf l1"></div>
+                <div class="pixel leaf-dark l2"></div>
+                <div class="pixel leaf l3"></div>
+                <div class="pixel leaf-dark l4"></div>
+                <div class="pixel leaf l5"></div>
+                
+                <div class="pixel leaf l6"></div>
+                <div class="pixel leaf-dark l7"></div>
+                <div class="pixel leaf l8"></div>
+                <div class="pixel leaf-dark l9"></div>
+                <div class="pixel leaf l10"></div>
+            </div>
+        </div>
+
+        <!-- Tulip 6 - Purple (back left) -->
+        <div class="tulip-container tulip6">
+            <div class="tulip">
+                <div class="pixel petal-highlight-purple p1"></div>
+                <div class="pixel petal-light-purple p2"></div>
+                <div class="pixel petal-highlight-purple p3"></div>
+                
+                <div class="pixel petal-medium-purple p4"></div>
+                <div class="pixel petal-light-purple p5"></div>
+                <div class="pixel petal-highlight-purple p6"></div>
+                <div class="pixel petal-light-purple p7"></div>
+                <div class="pixel petal-medium-purple p8"></div>
+                
+                <div class="pixel petal-dark-purple p9"></div>
+                <div class="pixel petal-medium-purple p10"></div>
+                <div class="pixel petal-light-purple p11"></div>
+                <div class="pixel petal-highlight-purple p12"></div>
+                <div class="pixel petal-light-purple p13"></div>
+                <div class="pixel petal-medium-purple p14"></div>
+                <div class="pixel petal-dark-purple p15"></div>
+                
+                <div class="pixel petal-dark-purple p16"></div>
+                <div class="pixel petal-medium-purple p17"></div>
+                <div class="pixel petal-light-purple p18"></div>
+                <div class="pixel petal-highlight-purple p19"></div>
+                <div class="pixel petal-light-purple p20"></div>
+                <div class="pixel petal-medium-purple p21"></div>
+                <div class="pixel petal-dark-purple p22"></div>
+                
+                <div class="pixel petal-medium-purple p23"></div>
+                <div class="pixel petal-light-purple p24"></div>
+                <div class="pixel petal-highlight-purple p25"></div>
+                <div class="pixel petal-light-purple p26"></div>
+                <div class="pixel petal-medium-purple p27"></div>
+                
+                <div class="pixel petal-light-purple p28"></div>
+                <div class="pixel petal-medium-purple p29"></div>
+                <div class="pixel petal-light-purple p30"></div>
+                
+                <div class="pixel stem s1"></div>
+                <div class="pixel stem-dark s2"></div>
+                <div class="pixel stem s3"></div>
+                <div class="pixel stem-dark s4"></div>
+                <div class="pixel stem s5"></div>
+                <div class="pixel stem-dark s6"></div>
+                <div class="pixel stem s7"></div>
+                <div class="pixel stem-dark s8"></div>
+                <div class="pixel stem s9"></div>
+                <div class="pixel stem-dark s10"></div>
+                <div class="pixel stem s11"></div>
+                <div class="pixel stem-dark s12"></div>
+                
+                <div class="pixel leaf l1"></div>
+                <div class="pixel leaf-dark l2"></div>
+                <div class="pixel leaf l3"></div>
+                <div class="pixel leaf-dark l4"></div>
+                <div class="pixel leaf l5"></div>
+                
+                <div class="pixel leaf l6"></div>
+                <div class="pixel leaf-dark l7"></div>
+                <div class="pixel leaf l8"></div>
+                <div class="pixel leaf-dark l9"></div>
+                <div class="pixel leaf l10"></div>
+            </div>
+        </div>
+
+        <!-- Tulip 7 - Red (back right) -->
+        <div class="tulip-container tulip7">
+            <div class="tulip">
+                <div class="pixel petal-highlight-red p1"></div>
+                <div class="pixel petal-light-red p2"></div>
+                <div class="pixel petal-highlight-red p3"></div>
+                
+                <div class="pixel petal-medium-red p4"></div>
+                <div class="pixel petal-light-red p5"></div>
+                <div class="pixel petal-highlight-red p6"></div>
+                <div class="pixel petal-light-red p7"></div>
+                <div class="pixel petal-medium-red p8"></div>
+                
+                <div class="pixel petal-dark-red p9"></div>
+                <div class="pixel petal-medium-red p10"></div>
+                <div class="pixel petal-light-red p11"></div>
+                <div class="pixel petal-highlight-red p12"></div>
+                <div class="pixel petal-light-red p13"></div>
+                <div class="pixel petal-medium-red p14"></div>
+                <div class="pixel petal-dark-red p15"></div>
+                
+                <div class="pixel petal-dark-red p16"></div>
+                <div class="pixel petal-medium-red p17"></div>
+                <div class="pixel petal-light-red p18"></div>
+                <div class="pixel petal-highlight-red p19"></div>
+                <div class="pixel petal-light-red p20"></div>
+                <div class="pixel petal-medium-red p21"></div>
+                <div class="pixel petal-dark-red p22"></div>
+                
+                <div class="pixel petal-medium-red p23"></div>
+                <div class="pixel petal-light-red p24"></div>
+                <div class="pixel petal-highlight-red p25"></div>
+                <div class="pixel petal-light-red p26"></div>
+                <div class="pixel petal-medium-red p27"></div>
+                
+                <div class="pixel petal-light-red p28"></div>
+                <div class="pixel petal-medium-red p29"></div>
+                <div class="pixel petal-light-red p30"></div>
+                
+                <div class="pixel stem s1"></div>
+                <div class="pixel stem-dark s2"></div>
+                <div class="pixel stem s3"></div>
+                <div class="pixel stem-dark s4"></div>
+                <div class="pixel stem s5"></div>
+                <div class="pixel stem-dark s6"></div>
+                <div class="pixel stem s7"></div>
+                <div class="pixel stem-dark s8"></div>
+                <div class="pixel stem s9"></div>
+                <div class="pixel stem-dark s10"></div>
+                <div class="pixel stem s11"></div>
+                <div class="pixel stem-dark s12"></div>
+                
+                <div class="pixel leaf l1"></div>
+                <div class="pixel leaf-dark l2"></div>
+                <div class="pixel leaf l3"></div>
+                <div class="pixel leaf-dark l4"></div>
+                <div class="pixel leaf l5"></div>
+                
+                <div class="pixel leaf l6"></div>
+                <div class="pixel leaf-dark l7"></div>
+                <div class="pixel leaf l8"></div>
+                <div class="pixel leaf-dark l9"></div>
+                <div class="pixel leaf l10"></div>
+            </div>
+        </div>
+
+        <!-- Grass Area -->
+        <div class="grass-area">
+            <!-- First row of grass blades -->
+            <div class="pixel grass-light g1"></div>
+            <div class="pixel grass-medium g2"></div>
+            <div class="pixel grass-light g3"></div>
+            <div class="pixel grass-dark g4"></div>
+            <div class="pixel grass-light g5"></div>
+            <div class="pixel grass-medium g6"></div>
+            <div class="pixel grass-light g7"></div>
+            <div class="pixel grass-medium g8"></div>
+            <div class="pixel grass-dark g9"></div>
+            <div class="pixel grass-light g10"></div>
+            <div class="pixel grass-medium g11"></div>
+            <div class="pixel grass-light g12"></div>
+            <div class="pixel grass-dark g13"></div>
+            <div class="pixel grass-light g14"></div>
+            <div class="pixel grass-medium g15"></div>
+            <div class="pixel grass-dark g16"></div>
+            <div class="pixel grass-light g17"></div>
+            <div class="pixel grass-medium g18"></div>
+            <div class="pixel grass-light g19"></div>
+            <div class="pixel grass-dark g20"></div>
+            <div class="pixel grass-medium g21"></div>
+            <div class="pixel grass-light g22"></div>
+            <div class="pixel grass-medium g23"></div>
+            <div class="pixel grass-dark g24"></div>
+            <div class="pixel grass-light g25"></div>
+            <div class="pixel grass-medium g26"></div>
+            <div class="pixel grass-light g27"></div>
+            <div class="pixel grass-dark g28"></div>
+            <div class="pixel grass-medium g29"></div>
+            <div class="pixel grass-light g30"></div>
+            <div class="pixel grass-medium g31"></div>
+            <div class="pixel grass-dark g32"></div>
+            <div class="pixel grass-light g33"></div>
+            <div class="pixel grass-medium g34"></div>
+            <div class="pixel grass-light g35"></div>
+            <div class="pixel grass-dark g36"></div>
+            <div class="pixel grass-medium g37"></div>
+            <div class="pixel grass-light g38"></div>
+            <div class="pixel grass-medium g39"></div>
+            <div class="pixel grass-dark g40"></div>
+            <div class="pixel grass-light g41"></div>
+            <div class="pixel grass-medium g42"></div>
+            <div class="pixel grass-light g43"></div>
+            <div class="pixel grass-dark g44"></div>
+            <div class="pixel grass-medium g45"></div>
+            <div class="pixel grass-light g46"></div>
+            <div class="pixel grass-medium g47"></div>
+            <div class="pixel grass-dark g48"></div>
+            <div class="pixel grass-light g49"></div>
+
+            <!-- Second row of grass blades -->
+            <div class="pixel grass-medium g50"></div>
+            <div class="pixel grass-dark g51"></div>
+            <div class="pixel grass-light g52"></div>
+            <div class="pixel grass-medium g53"></div>
+            <div class="pixel grass-dark g54"></div>
+            <div class="pixel grass-light g55"></div>
+            <div class="pixel grass-medium g56"></div>
+            <div class="pixel grass-dark g57"></div>
+            <div class="pixel grass-light g58"></div>
+            <div class="pixel grass-medium g59"></div>
+            <div class="pixel grass-dark g60"></div>
+            <div class="pixel grass-light g61"></div>
+            <div class="pixel grass-medium g62"></div>
+            <div class="pixel grass-dark g63"></div>
+            <div class="pixel grass-light g64"></div>
+            <div class="pixel grass-medium g65"></div>
+            <div class="pixel grass-dark g66"></div>
+            <div class="pixel grass-light g67"></div>
+            <div class="pixel grass-medium g68"></div>
+            <div class="pixel grass-dark g69"></div>
+            <div class="pixel grass-light g70"></div>
+            <div class="pixel grass-medium g71"></div>
+            <div class="pixel grass-dark g72"></div>
+            <div class="pixel grass-light g73"></div>
+            <div class="pixel grass-medium g74"></div>
+            <div class="pixel grass-dark g75"></div>
+            <div class="pixel grass-light g76"></div>
+            <div class="pixel grass-medium g77"></div>
+            <div class="pixel grass-dark g78"></div>
+            <div class="pixel grass-light g79"></div>
+            <div class="pixel grass-medium g80"></div>
+            <div class="pixel grass-dark g81"></div>
+            <div class="pixel grass-light g82"></div>
+            <div class="pixel grass-medium g83"></div>
+            <div class="pixel grass-dark g84"></div>
+            <div class="pixel grass-light g85"></div>
+            <div class="pixel grass-medium g86"></div>
+            <div class="pixel grass-dark g87"></div>
+            <div class="pixel grass-light g88"></div>
+            <div class="pixel grass-medium g89"></div>
+            <div class="pixel grass-dark g90"></div>
+            <div class="pixel grass-light g91"></div>
+            <div class="pixel grass-medium g92"></div>
+            <div class="pixel grass-dark g93"></div>
+            <div class="pixel grass-light g94"></div>
+            <div class="pixel grass-medium g95"></div>
+            <div class="pixel grass-dark g96"></div>
+            <div class="pixel grass-light g97"></div>
+            <div class="pixel grass-medium g98"></div>
+        </div>
+    </div>
+</body>
+</html>
